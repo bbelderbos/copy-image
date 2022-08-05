@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Upload file from clipboard to S3</title>
+  </head>
+  <body>
+    <h1>Upload file from clipboard to S3</h1>
+
+    <p>With a file on your clipboard, hit control + v and it should upload to S3 and be shown below.</p>
+
+    <hr>
+
+    <h2>Uploaded attachments</h2>
+    <div id="attachments"></div>
+
+    <script type="text/javascript">
+
+      // adapted from:
+      // https://gist.githubusercontent.com/kidatti/f93feba1ec4be2117d1b/raw/
+      // a53eeeec35ecae6b12ae9487a85dc79b40b65258/clipboard_image_post_js.html
+      document.onpaste = function(event){
+        let items = (event.clipboardData || event.originalEvent.clipboardData).items;
+
+        let files = [];
+        for (let i = 0 ; i < items.length ; i++) {
+          let item = items[i];
+          let file = item.getAsFile();
+          files.push(file);
+        }
+
+        let filenames = files.map(function(file){
+          return file.name
+        }).join("\n- ");
+
+        let msg = "You are about to attach the following files:\n\n"
+        msg += "- " + filenames;
+        msg += "\n\nProceed?";
+        if(confirm(msg)){
+          upload_file_with_ajax(files);
+        }
+      }
+
+      async function postData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            //'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+      }
+
+      function upload_file_with_ajax(files){
+        let formData = new FormData();
+        for (let i = 0 ; i < files.length ; i++) {
+          formData.append('file', files[i]);
+        }
+
+        console.log(formData);
+        postData('upload', formData).then((data) => {
+          console.log(data); // JSON data parsed by `data.json()` call
+        });
+        /*
+        $.ajax('./upload' , {
+          type: 'POST',
+          contentType: false,
+          processData: false,
+          data: formData,
+          error: function(xhr, textStatus, errorThrown) {
+            let error = xhr.responseText.replace(/['"]+/g, '');
+            alert(error);
+          },
+          success: function(res) {
+            for (let i = 0 ; i < res.urls.length ; i++) {
+              let row = res.urls[i];
+              let elem = '<li class="list-group-item">';
+              elem += '<a href="' + row.url + '" target="_blank">';
+              elem += row.filename + '</a></li>';
+              $("#attachments").append(elem);
+            }
+          }
+        });
+        */
+      }
+    </script>
+
+
+  </body>
+</html>
+
