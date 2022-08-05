@@ -2,4 +2,4 @@
 
 Demo repo for upcoming blog post.
 
-<video src="https://user-images.githubusercontent.com/387927/183131616-7ee01fcf-4887-4268-8f38-8e7cad10f017.mp4" controls="controls"></video>
+<video src="https://user-images.githubusercontent.com/387927/183132296-01916e5b-7f34-4046-8b28-e8d7061cb488.mp4" controls="controls" style="max-width: 1178px;"></video>
