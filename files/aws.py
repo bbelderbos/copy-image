@@ -1,5 +1,4 @@
 import logging
-import os
 
 import boto3
 from botocore.config import Config
@@ -58,4 +57,3 @@ def upload_to_s3(file, acl=DEFAULT_ACL, bucket=None, region=None):
 
     url = f"https://{bucket}.s3.{region}.amazonaws.com/{response.key}"
     return url
-

@@ -18,7 +18,17 @@
     <hr>
 
     <h2>Uploaded attachments</h2>
-    <div id="attachments"></div>
+    <ul class="list-group" id="attachments">
+      {% for attachment in attachments %}
+        {% with attachment.signed_url as signed_url %}
+          <li class="list-group-item">
+            <a href="{{ signed_url }}" target="_blank">{{ attachment.filename }}</a>
+          </li>
+        {% endwith %}
+      {% empty %}
+        <li class="list-group-item">Paste a file from your clipboard (ctrl + v) ...</li>
+      {% endfor %}
+    </ul>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
