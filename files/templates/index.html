@@ -20,6 +20,9 @@
     <h2>Uploaded attachments</h2>
     <div id="attachments"></div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
       // adapted from:
@@ -47,35 +50,12 @@
         }
       }
 
-      async function postData(url = '', data = {}) {
-        // Default options are marked with *
-        const response = await fetch(url, {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            //'Content-Type': 'application/json'
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
-      }
-
       function upload_file_with_ajax(files){
         let formData = new FormData();
         for (let i = 0 ; i < files.length ; i++) {
           formData.append('file', files[i]);
         }
 
-        console.log(formData);
-        postData('upload', formData).then((data) => {
-          console.log(data); // JSON data parsed by `data.json()` call
-        });
-        /*
         $.ajax('./upload' , {
           type: 'POST',
           contentType: false,
@@ -95,7 +75,6 @@
             }
           }
         });
-        */
       }
     </script>
 
